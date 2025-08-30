@@ -1,0 +1,96 @@
+﻿@model Library_Management.Models.BookListViewModel
+
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">@Model.Title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row g-4">
+        <div class="col-md-4 text-center">
+            <img src="@Model.CoverImageUrl"
+                 class="img-fluid rounded shadow-sm"
+                 alt="@Model.Title"
+                 style="max-height: 300px; object-fit: cover;">
+        </div>
+
+        <div class="col-md-8">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(m => m.ISBN)</dt>
+                <dd class="col-sm-8">@Model.ISBN</dd>
+
+                <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(m => m.AuthorName)</dt>
+                <dd class="col-sm-8 d-flex align-items-center">
+                    @Model.AuthorName
+                    @if (!string.IsNullOrEmpty(Model.AuthorProfileImageUrl))
+                    {
+                        <img src="@Model.AuthorProfileImageUrl"
+                             class="rounded-circle ms-2"
+                             style="width: 30px; height: 30px; object-fit: cover;"
+                             alt="Author Profile">
+                    }
+                </dd>
+
+                <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(m => m.Genre)</dt>
+                <dd class="col-sm-8">@Model.Genre</dd>
+
+                <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(m => m.PublishedDate)</dt>
+                <dd class="col-sm-8">@Model.PublishedDate?.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-4 fw-semibold">Available Copies</dt>
+                <dd class="col-sm-8">@Model.AvailableCopies / @Model.TotalCopies</dd>
+            </dl>
+
+            <hr />
+
+            <h6 class="fw-semibold">@Html.DisplayNameFor(m => m.Description)</h6>
+            <p class="mb-0">@Model.Description</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left"></i> Close
+    </a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageCopiesModal-@Model.BookId">
+        <i class="bi bi-pencil-square"></i> Manage Copies
+    </button>
+</div>
+<!-- Manage Copies Modal -->
+<div class="modal fade" id="manageCopiesModal-@Model.BookId" tabindex="-1" aria-labelledby="manageCopiesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form asp-action="AddCopy" method="post">
+                <input type="hidden" name="BookId" value="@Model.BookId" />
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title" id="manageCopiesModalLabel">Manage Book Copies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="CoverImageUrl" class="form-label">Cover Image URL</label>
+                        <input type="text" class="form-control" name="CoverImageUrl" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Condition" class="form-label">Condition</label>
+                        <input type="text" class="form-control" name="Condition" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Source" class="form-label">Source</label>
+                        <input type="text" class="form-control" name="Source" required />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Add Copy</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
