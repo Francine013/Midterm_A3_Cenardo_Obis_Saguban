@@ -9,6 +9,7 @@ public class BookService : IBookService
     private readonly ICollection<BookCopy> _bookCopies = new List<BookCopy>();
 
     private BookService()
+
     {
         SeedData();
     }
